@@ -19,7 +19,7 @@ This repository contains three Vega-Lite interactive data visualizations created
 - **Features**: Grouped horizontal bar chart, percent and raw population, improved comparison UX
 - **File**: `census_race_comparison.json`
 
-## 🛠 How to View
+##  How to View
 Copy each spec into the [Vega-Lite Online Editor](https://vega.github.io/editor/#/custom/vega-lite) to interact with the charts.
 
 ---
