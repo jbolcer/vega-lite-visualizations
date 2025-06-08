@@ -1,0 +1,86 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 1000,
+  "height": 600,
+  "title": {
+    "text": "Map of US UFO Sightings by Decade",
+    "subtitle": {
+      "expr": "'Viewing UFO Sightings from ' + sliderDecade + '–' + (sliderDecade + 9)"
+    }
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/mbietz/datasets/main/ufo-short.csv"
+  },
+  "transform": [
+    { "filter": "datum.country == 'us'" },
+    {
+      "calculate": "year(toDate(datum.date))",
+      "as": "year"
+    },
+    {
+      "calculate": "floor(datum.year / 10) * 10",
+      "as": "decade"
+    }
+  ],
+  "projection": {
+    "type": "albersUsa"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://vega.github.io/vega-datasets/data/us-10m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "lightgray",
+        "stroke": "white"
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.decade == sliderDecade"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "color": "steelblue",
+        "opacity": 0.7
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          { "field": "city", "type": "nominal", "title": "City" },
+          { "field": "date", "type": "temporal", "title": "Date" },
+          { "field": "shape", "type": "nominal", "title": "Shape" },
+          { "field": "duration", "type": "nominal", "title": "Duration" },
+          { "field": "description", "type": "nominal", "title": "Description" }
+        ]
+      }
+    }
+  ],
+  "params": [
+    {
+      "name": "sliderDecade",
+      "value": 1990,
+      "bind": {
+        "input": "range",
+        "min": 1940,
+        "max": 2020,
+        "step": 10,
+        "name": "Select Decade: "
+      }
+    }
+  ]
+}

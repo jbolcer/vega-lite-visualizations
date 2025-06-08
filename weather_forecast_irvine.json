@@ -1,0 +1,59 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 1000,
+  "height": 600,
+  "padding": { "bottom": 50 },
+  "title": "7-Day Hourly Forecast for Irvine, California",
+  "data": {
+    "url": "https://api.weather.gov/gridpoints/SGX/39,59/forecast/hourly",
+    "format": {
+      "property": "properties.periods"
+    }
+  },
+  "transform": [
+    {
+      "calculate": "toDate(datum.startTime)",
+      "as": "datetime"
+    },
+    {
+      "calculate": "timeFormat(datum.datetime, '%a')",
+      "as": "day"
+    },
+    {
+      "calculate": "timeFormat(datum.datetime, '%a, %b %d at %I %p')",
+      "as": "prettyTime"
+    }
+  ],
+  "mark": { "type": "bar", "clip": true },
+  "encoding": {
+    "x": {
+      "field": "datetime",
+      "type": "temporal",
+      "axis": {
+        "format": "%I %p",
+        "title": "Time"
+      }
+    },
+    "y": {
+      "field": "temperature",
+      "type": "quantitative",
+      "scale": {
+        "domain": [50, 75]
+      },
+      "title": "Temperature (°F)"
+    },
+    "y2": { "value": 50 },
+    "color": {
+      "field": "day",
+      "type": "nominal",
+      "title": "Day of Week"
+    },
+    "tooltip": [
+      { "field": "prettyTime", "type": "nominal", "title": "Time" },
+      { "field": "temperature", "type": "quantitative", "title": "Temperature (°F)" },
+      { "field": "windSpeed", "type": "nominal", "title": "Wind Speed" },
+      { "field": "probabilityOfPrecipitation.value", "type": "quantitative", "title": "Chance of Rain (%)" },
+      { "field": "relativeHumidity.value", "type": "quantitative", "title": "Humidity (%)" }
+    ]
+  }
+}
